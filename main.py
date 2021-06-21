@@ -83,10 +83,10 @@ def commands():
     """Display command line arguments"""
 
     parser = argparse.ArgumentParser(description="Keyboard Word Count")
-    parser.add_argument("-report", type=None, help="summary report - yes/no")
-    parser.add_argument("-interval", type=int, help="interval")
+    parser.add_argument("-report", type=str,nargs="?", default="no", help="summary report - yes/no")
+    parser.add_argument("-interval", type=int, nargs="?", default=20, help="interval in minutes")
 
-    if len(sys.argv) < 2:
+    if len(sys.argv) < 1:
         parser.print_usage()
         sys.exit(2)
 
@@ -98,6 +98,8 @@ def main():
 
     args = commands()
 
+    print(args)
+
     if args["report"] == "yes":
         if not os.path.isfile(LOG_FILE):
             print("Log file not available")
@@ -106,8 +108,8 @@ def main():
         if os.stat(LOG_FILE).st_size == 0:
             print("Log file is empty.")
             sys.exit()
-
-        analyser = Analyzer(file=LOG_FILE, interval=20)
+        interval = args["interval"]
+        analyser = Analyzer(file=LOG_FILE, interval=interval)
 
         print('Frequently used words')
         print("%10s %10s"%("Word", "Count"), end="\n")
