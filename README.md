@@ -21,6 +21,13 @@ pip install -r requirements.txt
 nohup python main.py & 
 ```
 4. Type away and retrieve summary later
+
+## Report
+To retrieve summary of your report
+
+```
+python main.py --report yes --interval 60
+```
 ## License
 MIT License, see [MIT](license)
 
