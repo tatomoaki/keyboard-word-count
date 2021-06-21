@@ -16,10 +16,11 @@ source env/bin/activate
 pip install -r requirements.txt
 
 ```
-2. Run script in backgroud using nohup 
+3. Run script in backgroud using nohup 
 ```
 nohup python main.py & 
 ```
+4. Type away and retrieve summary later
 ## License
 MIT License, see [MIT](license)
 
