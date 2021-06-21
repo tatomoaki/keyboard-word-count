@@ -62,7 +62,7 @@ class Analyzer:
         words = len(sum(self.__groups.values(), []))
         return words
 
-    def get_frequently_used_word(self):
+    def get_frequently_used_words(self):
         words = sum(self.__groups.values(), [])
         frequency = Counter(words)
         return frequency.most_common(10)
@@ -76,8 +76,15 @@ class Analyzer:
 
         if reg.search(word):
             return True
-       
 
+    def get_most_active_period(self):
+        sorted_groups = sorted(self.__groups.items(), key=lambda x: len(x[1]), reverse=True)
+        if sorted_groups:
+            period, count = sorted_groups[0]
+            return (period, len(count))
+        return ()
+
+   
 
 def commands():
     """Display command line arguments"""
@@ -111,11 +118,16 @@ def main():
         print('Frequently used words')
         print("%10s %10s"%("Word", "Count"), end="\n")
         print('-'*30)
-        for entry in analyser.get_frequently_used_word():
+        for entry in analyser.get_frequently_used_words():
             k,v = entry
             print("%10s  %10d"%(k, v))
 
         print('\nWord Count', analyser.get_word_count())
+
+        active_period = analyser.get_most_active_period()
+        if active_period:
+            time, count = active_period
+            print('Most active period %s with word count %s'%(time, count))
 
         file_size = analyser.get_size()
         print("File size %s"%file_size)
@@ -129,7 +141,7 @@ def main():
             """
 
             nonlocal word
-            if key == keyboard.Key.space:
+            if key in [keyboard.Key.space, keyboard.Key.enter]:
                 # We have a 'word'
                 now = datetime.now().timestamp()
 
@@ -138,7 +150,7 @@ def main():
                 word = ""
             else:
                 try:
-                    if key not in [keyboard.Key.space]:
+                    if key not in [keyboard.Key.space, keyboard.key.enter]:
                         word += key.char
                 except AttributeError:
                     pass
